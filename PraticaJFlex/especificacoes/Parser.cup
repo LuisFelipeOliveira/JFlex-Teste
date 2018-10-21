@@ -1,0 +1,36 @@
+import java.io.*;
+import java_cup.runtime.*;
+import compilador2.Yylex;
+
+parser code
+{:
+	public static void main (String args[]) throws Exception{
+		new parser(new Yylex(System.in)).parse();
+		
+	}
+	
+	public void syntax_error(Symbol s){
+		report_error("Error de sintaxe. Linha: " +(s.right + 1) +
+		"Coluna: " + s.left + ". Texto: \"" + s.value + "\"", null);
+		
+	}
+	
+:};
+
+terminal String IDENTIFICADORES, OPERADORES, SIMBOLOSPONTUACAO, LITERALCHAR, LITERALSTRING, COMENTARIO, NOVALINHA, ESPACO, PALAVRARESERVADA
+terminal Integer LITERALNUMERICO, LITERAISPONTOFLUTUANTE
+
+START ::= DECLINCLUDE* FUNCAOPRINCIPAL DECLFUNCOES* 
+;
+
+DECLINCLUDE ::= #include<IDENTIFICADORES.h>
+;
+
+DECLFUNCOES ::= TIPO IDENTIFICADORES (LISTAARGUMENTOS) {COMANDO* return EXPRESSAO;}
+;
+
+FUNCAOPRINCIPAL ::= int main() {COMANDO* return LITERALNUMERICO;}
+;
+
+TIPO ::= int | float | double | char
+;
